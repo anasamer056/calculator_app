@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:calculator_app/ui/global/theme/app_colors/app_colors_dark.dart';
 
 ThemeData getThemeDataDark() => ThemeData(
-      colorScheme: ColorScheme(
+      colorScheme: const ColorScheme(
         brightness: Brightness.dark,
         primary: Colors.white,
         onPrimary: Colors.black,

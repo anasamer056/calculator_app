@@ -1,9 +1,9 @@
 import 'package:bloc/bloc.dart';
-import 'package:calculator_app/constants.dart';
-import 'package:calculator_app/cubits/calculate_cubit/calculate_cubit.dart';
-import 'package:calculator_app/model/result_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:hive_flutter/hive_flutter.dart';
+
+import '../../constants.dart';
+import '../../model/result_model.dart';
 
 part 'memory_state.dart';
 

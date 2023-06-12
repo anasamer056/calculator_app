@@ -1,12 +1,14 @@
-import 'package:calculator_app/model/result_model.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:math_parser/math_parser.dart';
+
+import '../../model/result_model.dart';
+
 part 'calculate_state.dart';
 
 class CalculateCubit extends Cubit<CalculateState> {
-  CalculateCubit() : super(CalculateInitial(ResultModel()));
+  CalculateCubit() : super(const CalculateInitial(ResultModel()));
 
   final ScrollController expressionController = ScrollController();
 
@@ -14,109 +16,119 @@ class CalculateCubit extends Cubit<CalculateState> {
     ResultModel resultModel, {
     required String input,
   }) {
-    resultModel.expression = resultModel.expression + input;
-    scrollExp(resultModel);
+    late String newExp;
+    late String newRes;
 
     try {
-      resultModel.result = evaluateExp(resultModel);
+      newExp = resultModel.expression + input;
+      newRes = evaluateExp(newExp);
+
+      scrollExp(resultModel);
+      emit(CalculateSuccess(ResultModel(expression: newExp, result: newRes)));
     } catch (e) {
-      emit(CalculateFailed.override(resultModel, errMsg: e.toString()));
-    }
-
-    emit(CalculateSuccess(resultModel));
-  }
-
-  void scrollExp(ResultModel resultModel) {
-    if (resultModel.expression.length > 29) {
-      expressionController.jumpTo(
-        expressionController.position.maxScrollExtent + 12,
-      );
+      emit(CalculateFailed(resultModel, e.toString()));
     }
   }
 
   void addOperator(ResultModel resultModel, {required String input}) {
     if (hasOperator(resultModel.expression) &&
         resultModel.expression.endsWith(' ')) {
-      resultModel.expression = resultModel.expression
-              .substring(0, resultModel.expression.length - 3) +
-          input;
-
       try {
-        resultModel.result = evaluateExp(resultModel);
-      } catch (e) {
-        emit(CalculateFailed.override(resultModel, errMsg: e.toString()));
-      }
-      scrollExp(resultModel);
+        late String newExp;
+        late String newRes;
 
-      emit(CalculateSuccess(resultModel));
+        newExp = resultModel.expression
+                .substring(0, resultModel.expression.length - 3) +
+            input;
+        newRes = evaluateExp(newExp);
+
+        scrollExp(resultModel);
+        emit(CalculateSuccess(ResultModel(expression: newExp, result: newRes)));
+      } catch (e) {
+        emit(CalculateFailed.copyWith(resultModel, errMsg: e.toString()));
+      }
     } else {
-      resultModel.expression = resultModel.expression + input;
       try {
-        resultModel.result = evaluateExp(resultModel);
+        late String newExp;
+        late String newRes;
+
+        newExp = resultModel.expression + input;
+        newRes = evaluateExp(newExp);
+
+        scrollExp(resultModel);
+        emit(CalculateSuccess(ResultModel(expression: newExp, result: newRes)));
       } catch (e) {
-        emit(CalculateFailed.override(resultModel, errMsg: e.toString()));
+        emit(CalculateFailed.copyWith(resultModel, errMsg: e.toString()));
       }
-      scrollExp(resultModel);
-      emit(CalculateSuccess(resultModel));
     }
   }
 
   void clearAll(ResultModel resultModel) {
-    emit(CalculateSuccess(ResultModel()));
+    emit(const CalculateSuccess(ResultModel()));
   }
 
   void clearLast(ResultModel resultModel) {
     if (resultModel.expression.isNotEmpty) {
       if (resultModel.expression[resultModel.expression.length - 1] == ' ') {
-        resultModel.expression = resultModel.expression
+        late String newExp;
+        late String newRes;
+
+        newExp = resultModel.expression
             .substring(0, resultModel.expression.length - 3);
-        resultModel.result = evaluateExp(resultModel);
+        newRes = evaluateExp(newExp);
 
-        emit(CalculateSuccess(resultModel));
+        emit(CalculateSuccess(ResultModel(expression: newExp, result: newRes)));
       } else {
-        resultModel.expression = resultModel.expression
-            .substring(0, resultModel.expression.length - 1);
-        resultModel.result = evaluateExp(resultModel);
+        late String newExp;
+        late String newRes;
 
-        emit(CalculateSuccess(resultModel));
+        newExp = resultModel.expression
+            .substring(0, resultModel.expression.length - 1);
+        newRes = evaluateExp(newExp);
+
+        emit(CalculateSuccess(ResultModel(expression: newExp, result: newRes)));
       }
     }
   }
 
-  String evaluateExp(ResultModel resultModel) {
-    if (resultModel.expression.isNotEmpty) {
-      if (hasOperator(resultModel.expression)) {
-        if (resultModel.expression[resultModel.expression.length - 1] != ' ') {
-          final output = MathNodeExpression.fromString(resultModel.expression)
-              .calc(MathVariableValues.none);
+  String evaluateExp(String expression) {
+    if (expression.isNotEmpty) {
+      if (hasOperator(expression) && expression[expression.length - 1] != ' ') {
+        late String newRes;
 
-          resultModel.result = output
-              .toStringAsFixed(2)
-              .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+        final output = MathNodeExpression.fromString(expression)
+            .calc(MathVariableValues.none);
 
-          return resultModel.result;
-        }
+        newRes = output
+            .toStringAsFixed(2)
+            .replaceAll(RegExp(r"([.]*0+)(?!.*\d)"), "");
+
+        return newRes;
+      } else {
+        return '';
       }
+    } else {
+      return '';
     }
-    return '';
   }
 
   void equalButton(ResultModel resultModel) {
+    late String newExp;
     if (resultModel.result.isNotEmpty) {
-      resultModel.expression = resultModel.result;
-      emit(CalculateSuccess(resultModel));
+      newExp = resultModel.result;
+
+      emit(CalculateSuccess(ResultModel(expression: newExp)));
     }
   }
 
   void decPointButton(ResultModel resultModel) {
     if (!resultModel.expression.endsWith('.')) {
       addNumber(resultModel, input: '.');
-      emit(CalculateSuccess(resultModel));
     }
   }
 
   void fetchMemory(ResultModel resultModel) {
-    emit(CalculateSuccess(resultModel));
+    emit(CalculateSuccess(ResultModel.copyWith(resultModel)));
   }
 
   bool hasOperator(String expression) {
@@ -127,6 +139,14 @@ class CalculateCubit extends Cubit<CalculateState> {
       return true;
     } else {
       return false;
+    }
+  }
+
+  void scrollExp(ResultModel resultModel) {
+    if (resultModel.expression.length > 29) {
+      expressionController.jumpTo(
+        expressionController.position.maxScrollExtent + 12,
+      );
     }
   }
 }

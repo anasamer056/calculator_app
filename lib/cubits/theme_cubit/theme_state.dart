@@ -8,12 +8,12 @@ abstract class ThemeState {
 }
 
 class ThemeInitial extends ThemeState {
-  ThemeInitial({super.isDark = false});
+  const ThemeInitial({super.isDark = false});
 }
 
 class ThemeChanged extends ThemeState {
   final ThemeData theme;
 
-  ThemeChanged({required bool isDark, required this.theme})
+  const ThemeChanged({required bool isDark, required this.theme})
       : super(isDark: isDark);
 }

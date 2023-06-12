@@ -12,7 +12,7 @@ class ResultBox extends StatelessWidget {
     return BlocBuilder<CalculateCubit, CalculateState>(
       builder: (context, state) {
         return Container(
-          padding: EdgeInsets.all(16),
+          padding: const EdgeInsets.all(16),
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height * 0.25,
           child: Column(
@@ -21,7 +21,7 @@ class ResultBox extends StatelessWidget {
             children: [
               Expanded(
                 child: SingleChildScrollView(
-                  physics: RangeMaintainingScrollPhysics(),
+                  physics: const RangeMaintainingScrollPhysics(),
                   scrollDirection: Axis.horizontal,
                   controller: BlocProvider.of<CalculateCubit>(context)
                       .expressionController,

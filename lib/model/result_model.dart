@@ -6,13 +6,19 @@ part 'result_model.g.dart';
 @HiveType(typeId: 0)
 class ResultModel extends Equatable {
   @HiveField(0)
-  String expression;
+  final String expression;
 
   @HiveField(1)
-  String result;
+  final String result;
 
-  ResultModel({this.expression = '', this.result = ''});
+  const ResultModel({this.expression = '', this.result = ''});
 
+  factory ResultModel.copyWith(ResultModel resultModel) {
+    return ResultModel(
+      expression: resultModel.expression,
+      result: resultModel.result,
+    );
+  }
   @override
   List<Object?> get props => [expression, result];
 }

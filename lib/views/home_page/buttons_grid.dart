@@ -1,12 +1,10 @@
-import 'package:calculator_app/cubits/calculate_cubit/calculate_cubit.dart';
-import 'package:calculator_app/cubits/memory_cubit/memory_cubit.dart';
-import 'package:calculator_app/ui/global/theme/app_colors/app_colors_dark.dart';
-import 'package:calculator_app/data/buttons_text.dart';
+import '../../cubits/calculate_cubit/calculate_cubit.dart';
+import '../../cubits/memory_cubit/memory_cubit.dart';
+import '../../data/buttons_text.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'dart:math' as math;
-import 'package:math_expressions/math_expressions.dart';
-import 'package:calculator_app/cubits/calculate_cubit/calculate_cubit_extension.dart';
+
+import '../../cubits/calculate_cubit/calculate_cubit_extension.dart';
 
 class ButtonsGrid extends StatelessWidget {
   const ButtonsGrid({

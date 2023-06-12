@@ -1,16 +1,14 @@
-import 'package:calculator_app/cubits/calculate_cubit/calculate_cubit.dart';
-import 'package:calculator_app/cubits/custom_bloc_observer.dart';
-import 'package:calculator_app/cubits/memory_cubit/memory_cubit.dart';
-import 'package:calculator_app/cubits/theme_cubit/theme_cubit.dart';
-import 'package:calculator_app/ui/global/theme/theme_data/theme_data_dark.dart';
-import 'package:calculator_app/model/result_model.dart';
-import 'package:calculator_app/ui/global/theme/theme_data/theme_data_light.dart';
-import 'package:calculator_app/views/home_page/home_page_view.dart';
+import 'cubits/calculate_cubit/calculate_cubit.dart';
+import 'cubits/custom_bloc_observer.dart';
+import 'cubits/memory_cubit/memory_cubit.dart';
+import 'cubits/theme_cubit/theme_cubit.dart';
+import 'model/result_model.dart';
+import 'ui/global/theme/theme_data/theme_data_light.dart';
+import 'views/home_page/home_page_view.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/hive_flutter.dart';
-import 'package:calculator_app/constants.dart';
+import 'constants.dart';
 
 void main() async {
   Bloc.observer = CustomBlocObserver();
@@ -29,7 +27,7 @@ void main() async {
         create: (context) => MemoryCubit(),
       ),
     ],
-    child: CalculatorApp(),
+    child: const CalculatorApp(),
   ));
 }
 

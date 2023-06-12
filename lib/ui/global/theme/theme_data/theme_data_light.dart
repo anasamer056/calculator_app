@@ -1,10 +1,8 @@
-import 'package:calculator_app/ui/global/theme/app_colors/app_colors_light.dart';
 import 'package:flutter/material.dart';
-import 'package:calculator_app/ui/global/theme/app_colors/app_colors_dark.dart';
 import 'package:flutter/services.dart';
 
 ThemeData getThemeDataLight() => ThemeData(
-      colorScheme: ColorScheme(
+      colorScheme: const ColorScheme(
         brightness: Brightness.light,
         primary: Color(0xFF202020),
         onPrimary: Color(0xFF505050),

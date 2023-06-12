@@ -6,19 +6,19 @@ Future<dynamic> customDialogBuilder(BuildContext context) {
   return showDialog(
     context: context,
     builder: (context) => AlertDialog(
-      title: Text('You sure?'),
+      title: const Text('You sure?'),
       actions: [
         TextButton(
             onPressed: () {
               BlocProvider.of<MemoryCubit>(context).clearMemory();
               Navigator.pop(context);
             },
-            child: Text('Yes')),
+            child: const Text('Yes')),
         TextButton(
             onPressed: () {
               Navigator.pop(context);
             },
-            child: Text('No'))
+            child: const Text('No'))
       ],
     ),
   );
